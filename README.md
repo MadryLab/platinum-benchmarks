@@ -1,6 +1,8 @@
 # Platinum Benchmarks
 
-This repository contains the evaluation code for "[Large Language Model Benchmarks Do Not Test Reliability](#)."
+[**🏆 Leaderboard**](http://platinum-bench.csail.mit.edu/) &nbsp;|&nbsp; [**📖 Paper**](https://arxiv.org/abs/2502.03461) &nbsp;|&nbsp; [**🤗 Dataset**](https://huggingface.co/datasets/madrylab/platinum-bench)
+
+This repository contains the evaluation code for "[Do Large Language Model Benchmarks Test Reliability?](https://arxiv.org/abs/2502.03461)."
 
 We introduce **platinum benchmarks**, LLM benchmarks designed to test the reliability. Platinum benchmarks are carefully curated to minimize label errors and ambiguity, so that perfect performance is possible. It turns out, frontier language models still make mistakes on surprisingly simple tasks.
 
