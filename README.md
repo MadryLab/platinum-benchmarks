@@ -18,7 +18,7 @@ Our benchmark consists of fifteen platinum benchmarks adapted from existing data
 Clone and navigate into the repository:
 
 ```bash
-git clone https://github.com/evendrow/platinum-benchmarks.git
+git clone https://github.com/MadryLab/platinum-benchmarks.git
 cd platinum-benchmarks
 ```
 
