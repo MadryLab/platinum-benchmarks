@@ -371,6 +371,8 @@ class ModelEngineFactory:
                 api_name="gemini-2.0-flash-thinking-exp-01-21",
                 max_completion_tokens=32000,
             )
+        elif model_name == "gemini-2.0-pro-02-05":
+            engine = GoogleModel(api_name="gemini-2.0-pro-exp-02-05")
         elif model_name == "grok-2-1212":
             engine = XAIModel(api_name="grok-2-1212")
         elif model_name == "grok-2-vision-1212":
@@ -393,6 +395,8 @@ class ModelEngineFactory:
             engine = DeepInfraModel(api_name="meta-llama/Llama-3.3-70B-Instruct")
         elif model_name == "Qwen/Qwen2.5-72B-Instruct":
             engine = DeepInfraModel(api_name="Qwen/Qwen2.5-72B-Instruct")
+        elif model_name == "Qwen2.5-Max":
+            engine = OpenRouterModel(api_name="qwen/qwen-max")
         elif model_name == "o1-2024-12-17-med":
             engine = OpenAIModel(
                 api_name="o1-2024-12-17",

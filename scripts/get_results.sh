@@ -26,5 +26,7 @@ python src/run_benchmark.py \
         o1-2024-12-17-high \
         deepseek-r1 \
         o3-mini-2025-01-31-high \
+        gemini-2.0-pro-02-05 \
+        Qwen2.5-Max \
     --output-file ./outputs/live_results.csv \
     --save-errors
