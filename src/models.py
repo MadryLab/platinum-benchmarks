@@ -252,17 +252,23 @@ class MistralModel(Model):
 
 class GoogleModel(Model):
     def init_client(self):
-        from google import genai
+        # from google import genai
+        import google.generativeai as genai
 
-        self.client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+        # self.client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+        genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+        self.model = genai.GenerativeModel(self.api_name)
 
     def predict(self, prompt, temperature=0.5):
-        generation_config = {
-            "temperature": temperature,
-            "max_output_tokens": self.max_tokens,
-        }
-        completion = self.client.models.generate_content(
-            model=self.api_name, contents=prompt, config=generation_config
+        import google.generativeai as genai
+        from google.api_core import retry
+        generation_config = genai.GenerationConfig(
+            temperature=temperature,
+            max_output_tokens=self.max_tokens,
+        )
+        completion = self.model.generate_content(
+            contents=prompt, generation_config=generation_config,
+            request_options={"retry": retry.Retry(maximum=4),}
         )
         response = completion.text
         return response
@@ -360,7 +366,7 @@ class ModelEngineFactory:
         elif model_name == "gemini-1.5-pro":
             engine = GoogleModel(api_name="gemini-1.5-pro-002")
         elif model_name == "gemini-2.0-flash":
-            engine = GoogleModel(api_name="gemini-2.0-flash-exp")
+            engine = GoogleModel(api_name="gemini-2.0-flash-001")
         elif model_name == "gemini-2.0-flash-thinking":
             engine = GoogleModel(
                 api_name="gemini-2.0-flash-thinking-exp-1219",
