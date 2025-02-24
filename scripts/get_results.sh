@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python platinum-benchmarks/src/run_benchmark.py \
+python src/run_benchmark.py \
     --model-list \
         meta-llama/Meta-Llama-3.1-405B-Instruct \
         claude-3-5-sonnet \
