@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python src/run_benchmark.py \
+python platinum-benchmarks/src/run_benchmark.py \
     --model-list \
         meta-llama/Meta-Llama-3.1-405B-Instruct \
         claude-3-5-sonnet \
@@ -28,5 +28,7 @@ python src/run_benchmark.py \
         o3-mini-2025-01-31-high \
         gemini-2.0-pro-02-05 \
         Qwen2.5-Max \
+        claude-3-7-sonnet-20250219 \
+        claude-3-7-sonnet-20250219-thinking \
     --output-file ./outputs/live_results.csv \
     --save-errors

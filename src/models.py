@@ -197,6 +197,27 @@ class AnthropicModel(Model):
         return response
 
 
+class AnthropicThinkingModel(Model):
+    def init_client(self):
+        import anthropic
+
+        self.client = anthropic.Anthropic(
+            api_key=os.getenv("ANTHROPIC_API_KEY"),
+        )
+
+    def predict(self, prompt, temperature=None):
+        completion = self.client.messages.create(
+            model=self.api_name,
+            max_tokens=self.max_tokens,
+            thinking={
+                "type": "enabled",
+                "budget_tokens": self.api_kwargs["budget_tokens"]
+            },
+            messages=[{"role": "user", "content": prompt}],
+        )
+        response = completion.content[-1].text
+        return response
+
 class AzureOpenAIModel(Model):
     def init_client(self):
         from openai import AzureOpenAI
@@ -312,6 +333,7 @@ class ModelEngineFactory:
         "o1-2024-12-17-high": 1,
         "o1-2024-12-17-med": 1,
         "o3-mini-2025-01-31-high": 1,
+        "claude-3-7-sonnet-20250219-thinking": None,
     }
 
     reasoning_models = [
@@ -323,6 +345,7 @@ class ModelEngineFactory:
         "deepseek-r1",
         "gemini-2.0-flash-thinking",
         "gemini-2.0-flash-thinking-01-21",
+        "claude-3-7-sonnet-20250219-thinking",
     ]
 
     @classmethod
@@ -355,6 +378,10 @@ class ModelEngineFactory:
             engine = AnthropicModel(api_name="claude-3-5-sonnet-20240620")
         elif model_name == "claude-3-5-sonnet-20241022":
             engine = AnthropicModel(api_name="claude-3-5-sonnet-20241022")
+        elif model_name == "claude-3-7-sonnet-20250219":
+            engine = AnthropicModel(api_name="claude-3-7-sonnet-20250219", max_tokens=16000)
+        elif model_name == "claude-3-7-sonnet-20250219-thinking":
+            engine = AnthropicThinkingModel(api_name="claude-3-7-sonnet-20250219", max_tokens=20000, budget_tokens=16000)
         elif model_name == "claude-3-5-haiku":
             engine = AnthropicModel(api_name="claude-3-5-haiku-20241022")
         elif model_name == "mistral-large":
