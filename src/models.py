@@ -215,7 +215,13 @@ class AnthropicThinkingModel(Model):
             },
             messages=[{"role": "user", "content": prompt}],
         )
-        response = completion.content[-1].text
+        # response = completion.content[-1].text
+        response = ''
+        for block in completion.content:
+            if block.type == 'text':
+                response += block.text
+            elif block.type == 'thinking':
+                response += '\n<thinking>\n' + block.thinking + '\n</thinking>\n'
         return response
 
 class AzureOpenAIModel(Model):
