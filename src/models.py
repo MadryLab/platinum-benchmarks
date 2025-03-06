@@ -368,6 +368,8 @@ class ModelEngineFactory:
             engine = OpenAIModel(api_name="gpt-4o-2024-11-20")
         elif model_name == "gpt-4o-mini":
             engine = OpenAIModel(api_name="gpt-4o-mini-2024-07-18")
+        elif model_name == "gpt-4.5-preview-2025-02-27":
+            engine = OpenAIModel(api_name="gpt-4.5-preview-2025-02-27", max_tokens=16000)
         elif model_name == "o1-preview-2024-09-12":
             engine = OpenAIModel(
                 api_name="o1-preview-2024-09-12",

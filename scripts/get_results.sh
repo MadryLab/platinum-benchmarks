@@ -30,5 +30,6 @@ python src/run_benchmark.py \
         Qwen2.5-Max \
         claude-3-7-sonnet-20250219 \
         claude-3-7-sonnet-20250219-thinking \
+        gpt-4.5-preview-2025-02-27 \
     --output-file ./outputs/live_results.csv \
     --save-errors
