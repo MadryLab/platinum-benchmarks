@@ -1,30 +1,4 @@
 # Platinum Benchmarks
-This repository allows to perform Platinum Bench Evals efficiently via vLLM. 
-
-Platinum Bench is a recent LLM evaluation suite where all the questions and answers have been inspected manually for correctness and clarity. 
-
-
-### Usage Instructions:
-
-First, serve your model via vllm as usual (for more details please see [here](https://docs.vllm.ai/en/latest/serving/openai_compatible_server/)):
-
-```bash
-vllm serve meta-llama/Llama-3.2-1B-Instruct \
-        --dtype bfloat16 \
-        --api-key token-abc123 \
-        --gpu-memory-utilization 0.9 \
-        --port 8000
-```
-
-Second, you can launch benchmarks using the served model via: 
-
-```python
- python platinumbench/run_benchmark.py --vllm --port 8000 --host localhost --model-list meta-llama/Llama-3.2-1B-Instruct --api-key token-abc123 --output-file outputs/Llama-3.2-1B-Instruct.csv --temperature 0.5 --save-errors
-```
-
-Additionally, for evals on multiple models from a folder, you can use the `running_local_quantized_models.py` script.
-
-The original README from Platinum Bench is below:
 
 [**🏆 Leaderboard**](http://platinum-bench.csail.mit.edu/) &nbsp;|&nbsp; [**📖 Paper**](https://arxiv.org/abs/2502.03461) &nbsp;|&nbsp; [**🤗 Dataset**](https://huggingface.co/datasets/madrylab/platinum-bench) &nbsp;|&nbsp; [**🤗 GSM8K-Platinum**](https://huggingface.co/datasets/madrylab/gsm8k-platinum)
 
@@ -54,9 +28,9 @@ cd platinum-benchmarks
 Set up the environment and install the required dependencies:
 
 ```bash
-conda create -y -n platinum-bench python=3.10
+conda create -y -n platinum-bench python=3.12
 conda activate platinum-bench
-pip install -r requirements.txt
+pip install -e .
 ```
 
 Create a `.env` file with API keys for the models you'd like to use, such as:
@@ -98,6 +72,74 @@ Or, just use the script we provide to get results for all models we evaluate:
 
 ```bash
 bash scripts/get_results.sh
+```
+
+#### CLI 
+
+To see help in the environment where the package is installed:
+```bash
+platinumbench --help
+```
+
+#### Evaluating via vLLM
+Serve your model via vllm (for more details please see [here](https://docs.vllm.ai/en/latest/serving/openai_compatible_server/)):
+
+```bash
+vllm serve meta-llama/Llama-3.2-1B-Instruct \
+        --dtype bfloat16 \
+        --api-key token-abc123 \
+        --gpu-memory-utilization 0.9 \
+        --port 8000
+```
+
+Run the benchmarks using the served model via: 
+```bash
+ python platinumbench --vllm --port 8000 --host localhost --model-list meta-llama/Llama-3.2-1B-Instruct --api-key token-abc123 --output-file outputs/Llama-3.2-1B-Instruct.csv --temperature 0.5 --save-errors
+```
+
+or 
+
+```python
+ python platinumbench/run_benchmark.py --vllm --port 8000 --host localhost --model-list meta-llama/Llama-3.2-1B-Instruct --api-key token-abc123 --output-file outputs/Llama-3.2-1B-Instruct.csv --temperature 0.5 --save-errors
+```
+
+Additionally, for evals on multiple models from a folder, you can use the `running_local_quantized_models.py` script.
+
+#### Inside the python code
+
+You can call platinumbench inside the python code via and evaluate custom models.
+Example:
+```python
+from types import SimpleNamespace
+
+import platinumbench
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Pick any HF causal LM checkpoint you have access to
+model_id = "Qwen/Qwen3-8B"
+
+tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    device_map="auto",
+    torch_dtype="auto",
+    trust_remote_code=True,
+).eval()
+
+uniquename = f"hf:{model_id}"
+
+# If you're not using W&B, pass wandb=None
+wandb = None
+
+platinumbench.run_benchmark(
+    model_list={uniquename: (model, tokenizer)},
+    output_file=None,
+    parallelism=1,
+    errors_dir=None,
+    seed=42,  # or args.seed
+    wandb=wandb,
+    args=SimpleNamespace(),
+)
 ```
 
 ### Reproduce Our Paper Results
