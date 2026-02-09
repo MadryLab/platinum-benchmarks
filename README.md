@@ -1,4 +1,30 @@
 # Platinum Benchmarks
+This repository allows to perform Platinum Bench Evals efficiently via vLLM. 
+
+Platinum Bench is a recent LLM evaluation suite where all the questions and answers have been inspected manually for correctness and clarity. 
+
+
+### Usage Instructions:
+
+First, serve your model via vllm as usual (for more details please see [here](https://docs.vllm.ai/en/latest/serving/openai_compatible_server/)):
+
+```bash
+vllm serve meta-llama/Llama-3.2-1B-Instruct \
+        --dtype bfloat16 \
+        --api-key token-abc123 \
+        --gpu-memory-utilization 0.9 \
+        --port 8000
+```
+
+Second, you can launch benchmarks using the served model via: 
+
+```python
+ python platinumbench/run_benchmark.py --vllm --port 8000 --host localhost --model-list meta-llama/Llama-3.2-1B-Instruct --api-key token-abc123 --output-file outputs/Llama-3.2-1B-Instruct.csv --temperature 0.5 --save-errors
+```
+
+Additionally, for evals on multiple models from a folder, you can use the `running_local_quantized_models.py` script.
+
+The original README from Platinum Bench is below:
 
 [**🏆 Leaderboard**](http://platinum-bench.csail.mit.edu/) &nbsp;|&nbsp; [**📖 Paper**](https://arxiv.org/abs/2502.03461) &nbsp;|&nbsp; [**🤗 Dataset**](https://huggingface.co/datasets/madrylab/platinum-bench) &nbsp;|&nbsp; [**🤗 GSM8K-Platinum**](https://huggingface.co/datasets/madrylab/gsm8k-platinum)
 

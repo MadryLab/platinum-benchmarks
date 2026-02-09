@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python src/run_benchmark.py \
+python platinumbench/run_benchmark.py \
     --paper-version \
     --model-list \
         meta-llama/Meta-Llama-3.1-405B-Instruct \

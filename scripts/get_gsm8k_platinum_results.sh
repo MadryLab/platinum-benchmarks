@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python src/run_gsm8k_platinum.py \
+python platinumbench/run_gsm8k_platinum.py \
     --model-list \
         meta-llama/Meta-Llama-3.1-405B-Instruct \
         gpt-4o-2024-11-20 \
