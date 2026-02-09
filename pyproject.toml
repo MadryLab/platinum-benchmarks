@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "platinumbench"
+version = "0.0.1"
+description = "A example Python package"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+  { name = "Joshua Vendrow", email = "jvendrow@gmail.com" },
+  { name = "Edward Vendrow" },
+  { name = "Sara Beery" },
+  { name = "Aleksander Madry" },
+]
+license = { text = "Attribution 4.0 International" }
+
+dependencies = [
+  "anthropic>=0.40.0",
+  "datasets>=3.1.0",
+  "huggingface_hub>=0.27.1",
+  "openai>=1.59.7",
+  "pandas>=1.4.1",
+  "python-dotenv>=1.0.1",
+]
+
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.urls]
+Homepage = "https://github.com/IST-DASLab/local_platinum_bench"
+
+[project.scripts]
+platinumbench = "platinumbench.run_models:main"
+
+[tool.setuptools]
+packages = ["platinumbench"]

@@ -1,7 +1,7 @@
 """Evaluate models on Platinum Benchmarks
 
 Usage:
-python src/run_vision_benchmark.py --model-list gpt-4o-mini --coco-path PATH
+python platinumbench/run_vision_benchmark.py --model-list gpt-4o-mini --coco-path PATH
 """
 
 import datasets
@@ -39,13 +39,13 @@ def parse_fn_vqa(response):
         return "Parsing error"
         
 
-def run_vision_benchmark(model_list, output_file, coco_path):
+def run_vision_benchmark(model_list, output_file, coco_path,args=None):
     load_dotenv()
 
     dataset = datasets.load_dataset("madrylab/platinum-bench", 'vqa', split='test')
 
     response_cache = get_llm_cache('vqa')
-    engine = ModelInferenceEngine(response_cache=response_cache)
+    engine = ModelInferenceEngine(response_cache=response_cache,args=args)
 
     errors = []
     for model_name in model_list:
@@ -79,9 +79,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Evaluate models on Platinum Benchmarks')
 
     parser.add_argument('--model-list', type=str, nargs="+", default=None, help='A space-separated list of models to be evaluated')
+    parser.add_argument('--vllm', action='store_true', help='The model is served with vllm.')
+    parser.add_argument('--port', type=int, default=8000, help='Port number for vllm server.')
+    parser.add_argument('--host', type=str, default='localhost', help='Host for vllm server.')
+    parser.add_argument('--api-key', type=str, default='token-abc123', help='API key for the model, if required.')
     parser.add_argument('--output-file', type=str, default='./outputs/results_vision.csv', help='Output file name to save the results')
     parser.add_argument('--coco-path', type=str, default=None, help='Path to directory where val2014 folder is locate.')
-
+    parser.add_argument('--temperature', type=float, default=0.5, help='Temperature for the model default is 0.5.')
+    parser.add_argument('--reasoning-model', action='store_true', help='Indicate if the model is in reasoning mode.')
     args = parser.parse_args()
-
-    run_vision_benchmark(args.model_list, args.output_file, args.coco_path)
+    if len(args.model_list) > 1 and args.vllm:
+        raise ValueError("vllm serving with multiple models is not supported yet.")
+    
+    run_vision_benchmark(args.model_list, args.output_file, args.coco_path, args=args)
